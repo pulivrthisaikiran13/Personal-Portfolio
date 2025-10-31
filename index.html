@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<!-- Add scroll-smooth for anchor links -->
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sai Kiran Pulivarthi | Developer Portfolio</title>
+    
+    <!-- Custom SVG Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232dd4bf'/><text x='50' y='50' font-size='50' fill='%230f172a' text-anchor='middle' dy='.3em' font-family='sans-serif' font-weight='bold'>SK</text></svg>">
+
+    <!-- Load Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Load jQuery (Needed for EmailJS code) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Load EmailJS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+    
+    <!-- Link to external CSS file -->
+    <link rel="stylesheet" href="styles.css">
+
+    <script>
+        // Tailwind Configuration (must be defined before use)
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        // Light Mode Colors
+                        'primary-light': '#f1f5f9',   /* slate-50 */
+                        'secondary-light': '#ffffff', /* white */
+                        
+                        // Dark Mode Colors
+                        'primary-dark': '#1e293b',    /* Slate-800 (Card Background) */
+                        'secondary-dark': '#0f172a',  /* Slate-900 (Main Background) */
+                        
+                        // Accent Color
+                        'accent': '#2dd4bf',          /* Teal-400 */
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'Arial', '"Noto Sans"', 'sans-serif', '"Apple Color Emoji"', '"Segoe UI Emoji"', '"Segoe UI Symbol"', '"Noto Color Emoji"']
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<!-- Base theme classes (Removed transition-colors and duration-300 for instant switch) -->
+<body class="bg-secondary-light dark:bg-secondary-dark text-gray-800 dark:text-gray-200 font-sans">
+
+    <!-- Feedback Modal Structure -->
+    <div id="feedback-modal" class="feedback-modal">
+        <!-- Base styles -->
+        <div class="bg-primary-light dark:bg-primary-dark p-8 rounded-lg shadow-xl max-w-sm w-full text-center border-t-4">
+            <div id="modal-icon"></div>
+            <p id="modal-message" class="text-gray-900 dark:text-white text-lg font-semibold mb-6"></p>
+            <button id="modal-button" onclick="hideFeedbackModal()" class="">Close</button>
+        </div>
+    </div>
+
+    <!-- Header & Navigation -->
+    <header class="sticky top-0 z-50 bg-secondary-light/95 dark:bg-secondary-dark/95 backdrop-blur-sm shadow-lg border-b border-gray-200 dark:border-primary-dark">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="#hero" class="text-2xl font-bold text-accent">Sai Kiran</a>
+            
+            <div class="flex items-center space-x-6">
+                <!-- Desktop Navigation -->
+                <nav class="space-x-6 hidden md:flex">
+                    <a href="#hero" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-accent dark:hover:text-accent transition-colors">Home</a>
+                    <a href="#about" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-accent dark:hover:text-accent transition-colors">About</a>
+                    <a href="#skills" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-accent dark:hover:text-accent transition-colors">Technical Skills</a>
+                    <a href="#projects" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-accent dark:hover:text-accent transition-colors">Projects</a>
+                    <a href="#education" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-accent dark:hover:text-accent transition-colors">Education</a>
+                    <a href="#contact" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-accent dark:hover:text-accent transition-colors">Contact</a>
+                </nav>
+                
+                <!-- Theme Toggle Button (Desktop) -->
+                <button id="theme-toggle-btn" class="text-gray-600 dark:text-gray-300 hover:text-accent dark:hover:text-accent transition-colors" aria-label="Toggle theme">
+                    <i id="theme-icon-moon" data-lucide="moon" class="w-5 h-5 hidden"></i>
+                    <i id="theme-icon-sun" data-lucide="sun" class="w-5 h-5 hidden"></i>
+                </button>
+
+                <!-- Mobile Menu Open Button (Hamburger) -->
+                <button id="mobile-menu-open-btn" class="md:hidden text-gray-600 dark:text-gray-300 hover:text-accent dark:hover:text-accent transition-colors" aria-label="Open menu">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu-overlay" class="fixed inset-0 z-[100] bg-secondary-light dark:bg-secondary-dark p-6 hidden">
+        <div class="flex justify-between items-center mb-10">
+            <a href="#hero" class="text-2xl font-bold text-accent mobile-menu-link">Sai Kiran</a>
+            <button id="mobile-menu-close-btn" class="text-gray-600 dark:text-gray-300 hover:text-accent dark:hover:text-accent transition-colors" aria-label="Close menu">
+                <i data-lucide="x" class="w-8 h-8"></i>
+            </button>
+        </div>
+        <nav class="flex flex-col items-center space-y-6">
+            <a href="#hero" class="text-2xl font-medium text-gray-600 dark:text-gray-300 hover:text-accent dark:hover:text-accent transition-colors mobile-menu-link">Home</a>
+            <a href="#about" class="text-2xl font-medium text-gray-600 dark:text-gray-300 hover:text-accent dark:hover:text-accent transition-colors mobile-menu-link">About</a>
+            <a href="#skills" class="text-2xl font-medium text-gray-600 dark:text-gray-300 hover:text-accent dark:hover:text-accent transition-colors mobile-menu-link">Technical Skills</a>
+            <a href="#projects" class="text-2xl font-medium text-gray-600 dark:text-gray-300 hover:text-accent dark:hover:text-accent transition-colors mobile-menu-link">Projects</a>
+            <a href="#education" class="text-2xl font-medium text-gray-600 dark:text-gray-300 hover:text-accent dark:hover:text-accent transition-colors mobile-menu-link">Education</a>
+            <a href="#contact" class="text-2xl font-medium text-gray-600 dark:text-gray-300 hover:text-accent dark:hover:text-accent transition-colors mobile-menu-link">Contact</a>
+            
+            <!-- Theme Toggle Button (Mobile) -->
+            <button id="theme-toggle-btn-mobile" class="mt-8 text-gray-600 dark:text-gray-300 hover:text-accent dark:hover:text-accent transition-colors" aria-label="Toggle theme">
+                <i id="theme-icon-moon-mobile" data-lucide="moon" class="w-7 h-7 hidden"></i>
+                <i id="theme-icon-sun-mobile" data-lucide="sun" class="w-7 h-7 hidden"></i>
+            </button>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-4 pt-8 md:pt-12 pb-12 md:pb-20">
+
+        <!-- 1. HOME SECTION (Hero) -->
+        <section id="hero" class="mb-20 grid grid-cols-1 items-center gap-10 scroll-mt-20 text-center">
+            
+            <!-- Text Column -->
+            <div>
+                <p class="text-accent text-lg font-semibold mb-2">Hello, I'm</p>
+                <h1 class="text-5xl md:text-6xl font-extrabold text-gray-900 dark:text-white leading-tight">Sai Kiran <span class="text-accent">Pulivarthi</span></h1>
+                
+                <!-- H2 with Dynamic Typing Effect -->
+                <h2 class="text-2xl md:text-3xl mt-3 text-gray-500 dark:text-gray-400 font-semibold h-10">
+                    <span id="typing-text" class="text-accent"></span>
+                    <span class="blinking-cursor text-accent">|</span>
+                </h2>
+                
+                <p class="mt-6 text-gray-700 dark:text-gray-300 max-w-xl mx-auto">
+                    To leverage my technical knowledge, problem-solving skills, and passion for innovation in a challenging role where I can contribute to real-world projects, continue learning advanced technologies, and grow into a responsible professional.
+                </p>
+                <div class="mt-8 flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                    <a href="#projects" class="px-6 py-3 bg-accent text-secondary-dark font-semibold rounded-lg shadow-lg hover:bg-teal-300 transition-all transform hover:scale-105">View Projects</a>
+                    <a href="#contact" class="px-6 py-3 border border-accent text-accent font-semibold rounded-lg hover:bg-accent/10 transition-all transform hover:scale-105 flex items-center justify-center space-x-2">
+                        <i data-lucide="mail" class="w-5 h-5"></i>
+                        <span>Get In Touch</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <hr class="border-t border-gray-200 dark:border-primary-dark mb-20">
+
+        <!-- 2. ABOUT SECTION -->
+        <section id="about" class="mb-20 scroll-mt-20 text-center">
+            <h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-8 text-center border-l-4 border-accent pl-4 inline-block">About Me</h2>
+            
+            <div class="bg-primary-light dark:bg-primary-dark p-6 md:p-8 rounded-xl shadow-2xl border border-transparent dark:border-accent/10 max-w-4xl mx-auto transition-transform duration-300 hover:scale-[1.02]">
+                <p class="text-lg text-gray-700 dark:text-gray-300 mb-4 text-center">
+                    Hi, I am a final year BTech student who enjoys building software that is clean, reliable, and useful in real situations. I work mostly with Python, Django, and SQL, and I like turning ideas into full-stack applications that feel simple for users and structured for developers.
+                    I enjoy understanding how systems work at a deeper level. That curiosity pushes me to explore cloud platforms, backend architecture, and data-driven development.
+                </p>
+                <p class="text-md text-gray-600 dark:text-gray-400 text-center">
+                    I am focused on growing into a developer who writes clean code, builds secure applications, and solves problems in a thoughtful way. I learn continuously, take on new challenges, and enjoy building small tools that make everyday tasks easier.</p>
+                <div class="mt-6 flex flex-wrap gap-4 text-sm font-medium text-accent justify-center">
+                    <span class="flex items-center"><i data-lucide="code" class="w-5 h-5 mr-2"></i> Core: Python, Django & MySQL</span>
+                    <span class="flex items-center"><i data-lucide="shield-check" class="w-5 h-5 mr-2"></i> Focus: Software & Integrity</span>
+                    <span class="flex items-center"><i data-lucide="cloud" class="w-5 h-5 mr-2"></i> Certified: Cloud Computing</span>
+                </div>
+                 <!-- Download CV Button -->
+                <div class="mt-8 flex justify-center">
+                    <a href="https://drive.google.com/file/d/1ZKZ_FjnRfMYrmz88CYZYoSpD817mLns9/view?usp=sharing" target="_blank" rel="noopener noreferrer" 
+                       class="w-full sm:w-auto px-6 py-3 bg-accent text-secondary-dark font-semibold rounded-lg shadow-lg hover:bg-teal-300 transition-all transform hover:scale-105 flex items-center justify-center space-x-2">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                        <span>Download CV</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <hr class="border-t border-gray-200 dark:border-primary-dark mb-20">
+
+        <!-- 3. SKILLS SECTION (Technical Skills) -->
+        <section id="skills" class="mb-20 scroll-mt-20 text-center">
+            <h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-8 text-center border-l-4 border-accent pl-4 inline-block">Technical Skills</h2>
+            
+            <div class="space-y-10 max-w-4xl mx-auto">
+                <!-- Category 1: Programming & Backend -->
+                <div>
+                    <h3 class="text-xl font-semibold text-accent mb-4 flex items-center space-x-2 justify-center">
+                        <i data-lucide="code" class="w-5 h-5"></i>
+                        <span>Programming & Backend</span>
+                    </h3>
+                    <div class="flex flex-wrap gap-3 justify-center">
+                        <span class="bg-primary-light dark:bg-primary-dark text-gray-700 dark:text-gray-300 text-sm font-medium px-4 py-2 rounded-lg border border-accent/20 shadow-md transition-colors hover:bg-accent dark:hover:bg-accent hover:text-gray-900 dark:hover:text-gray-900">Python</span>
+                        <span class="bg-primary-light dark:bg-primary-dark text-gray-700 dark:text-gray-300 text-sm font-medium px-4 py-2 rounded-lg border border-accent/20 shadow-md transition-colors hover:bg-accent dark:hover:bg-accent hover:text-gray-900 dark:hover:text-gray-900">Django</span>
+                        <span class="bg-primary-light dark:bg-primary-dark text-gray-700 dark:text-gray-300 text-sm font-medium px-4 py-2 rounded-lg border border-accent/20 shadow-md transition-colors hover:bg-accent dark:hover:bg-accent hover:text-gray-900 dark:hover:text-gray-900">MySQL</span>
+                    </div>
+                </div>
+
+                <!-- Category 2: Frontend -->
+                <div>
+                    <h3 class="text-xl font-semibold text-accent mb-4 flex items-center space-x-2 justify-center">
+                        <i data-lucide="layout-grid" class="w-5 h-5"></i>
+                        <span>Frontend</span>
+                    </h3>
+                    <div class="flex flex-wrap gap-3 justify-center">
+                        <span class="bg-primary-light dark:bg-primary-dark text-gray-700 dark:text-gray-300 text-sm font-medium px-4 py-2 rounded-lg border border-accent/20 shadow-md transition-colors hover:bg-accent dark:hover:bg-accent hover:text-gray-900 dark:hover:text-gray-900">HTML</span>
+                        <span class="bg-primary-light dark:bg-primary-dark text-gray-700 dark:text-gray-300 text-sm font-medium px-4 py-2 rounded-lg border border-accent/20 shadow-md transition-colors hover:bg-accent dark:hover:bg-accent hover:text-gray-900 dark:hover:text-gray-900">CSS</span>
+                        <span class="bg-primary-light dark:bg-primary-dark text-gray-700 dark:text-gray-300 text-sm font-medium px-4 py-2 rounded-lg border border-accent/20 shadow-md transition-colors hover:bg-accent dark:hover:bg-accent hover:text-gray-900 dark:hover:text-gray-900">JavaScript</span>
+                        <span class="bg-primary-light dark:bg-primary-dark text-gray-700 dark:text-gray-300 text-sm font-medium px-4 py-2 rounded-lg border border-accent/20 shadow-md transition-colors hover:bg-accent dark:hover:bg-accent hover:text-gray-900 dark:hover:text-gray-900">Bootstrap</span>
+                        <span class="bg-primary-light dark:bg-primary-dark text-gray-700 dark:text-gray-300 text-sm font-medium px-4 py-2 rounded-lg border border-accent/20 shadow-md transition-colors hover:bg-accent dark:hover:bg-accent hover:text-gray-900 dark:hover:text-gray-900">ReactJs</span>
+                    </div>
+                </div>
+
+                <!-- Category 3: Data Science & Tools -->
+                <div>
+                    <h3 class="text-xl font-semibold text-accent mb-4 flex items-center space-x-2 justify-center">
+                        <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+                        <span>Data Science & Tools</span>
+                    </h3>
+                    <div class="flex flex-wrap gap-3 justify-center">
+                        <span class="bg-primary-light dark:bg-primary-dark text-gray-700 dark:text-gray-300 text-sm font-medium px-4 py-2 rounded-lg border border-accent/20 shadow-md transition-colors hover:bg-accent dark:hover:bg-accent hover:text-gray-900 dark:hover:text-gray-900">Pandas</span>
+                        <span class="bg-primary-light dark:bg-primary-dark text-gray-700 dark:text-gray-300 text-sm font-medium px-4 py-2 rounded-lg border border-accent/20 shadow-md transition-colors hover:bg-accent dark:hover:bg-accent hover:text-gray-900 dark:hover:text-gray-900">Numpy</span>
+                        <span class="bg-primary-light dark:bg-primary-dark text-gray-700 dark:text-gray-300 text-sm font-medium px-4 py-2 rounded-lg border border-accent/20 shadow-md transition-colors hover:bg-accent dark:hover:bg-accent hover:text-gray-900 dark:hover:text-gray-900">Seaborn</span>
+                        <span class="bg-primary-light dark:bg-primary-dark text-gray-700 dark:text-gray-300 text-sm font-medium px-4 py-2 rounded-lg border border-accent/20 shadow-md transition-colors hover:bg-accent dark:hover:bg-accent hover:text-gray-900 dark:hover:text-gray-900">Tensorflow</span>
+                        <span class="bg-primary-light dark:bg-primary-dark text-gray-700 dark:text-gray-300 text-sm font-medium px-4 py-2 rounded-lg border border-accent/20 shadow-md transition-colors hover:bg-accent dark:hover:bg-accent hover:text-gray-900 dark:hover:text-gray-900">Scikit-Learn</span>
+                        <span class="bg-primary-light dark:bg-primary-dark text-gray-700 dark:text-gray-300 text-sm font-medium px-4 py-2 rounded-lg border border-accent/20 shadow-md transition-colors hover:bg-accent dark:hover:bg-accent hover:text-gray-900 dark:hover:text-gray-900">Power BI</span>
+                        <span class="bg-primary-light dark:bg-primary-dark text-gray-700 dark:text-gray-300 text-sm font-medium px-4 py-2 rounded-lg border border-accent/20 shadow-md transition-colors hover:bg-accent dark:hover:bg-accent hover:text-gray-900 dark:hover:text-gray-900">Git / GitHub</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <hr class="border-t border-gray-200 dark:border-primary-dark mb-20">
+
+
+        <!-- 4. PROJECTS SECTION -->
+        <section id="projects" class="mb-20 scroll-mt-20 text-center">
+            <h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-12 text-center border-l-4 border-accent pl-4 inline-block">Featured Projects</h2>
+            
+            <div class="grid md:grid-cols-2 gap-10 max-w-4xl mx-auto">
+
+                <!-- Project Card 2: Bank Management System -->
+                <div class="bg-primary-light dark:bg-primary-dark p-6 rounded-xl shadow-2xl border border-transparent dark:border-accent/10 transition-transform duration-300 hover:scale-[1.02] text-left mx-auto flex flex-col h-full">
+                    <div class="flex-grow">
+                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2 text-center">Bank Management System</h3>
+                        <p class="text-sm font-medium text-accent mb-4 text-center">Python, MySQL, Database Management</p>
+                        <p class="text-gray-600 dark:text-gray-400 mb-6 text-left">
+                            Developed a system using Python and MySQL to handle customer registration, account management, and transaction processing with secure database connectivity.
+                        </p>
+                        <ul class="text-gray-700 dark:text-gray-300 space-y-2 mb-6">
+                            <li class="flex items-start"><i data-lucide="database" class="w-5 h-5 text-accent mr-2 mt-1 flex-shrink-0"></i>Implemented secure database connectivity for storing and retrieving account details with robust data validation and exception handling.</li>
+                            <li class="flex items-start"><i data-lucide="credit-card" class="w-5 h-5 text-accent mr-2 mt-1 flex-shrink-0"></i>Designed modular functions (deposit, withdrawal, balance inquiry) ensuring accuracy and efficient record management.</li>
+                        </ul>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <div class="flex flex-wrap gap-2 justify-center mt-4 mb-6">
+                            <span class="bg-accent/20 text-accent text-xs font-semibold px-3 py-1 rounded-full">Python</span>
+                            <span class="bg-accent/20 text-accent text-xs font-semibold px-3 py-1 rounded-full">MySQL</span>
+                            <span class="bg-accent/20 text-accent text-xs font-semibold px-3 py-1 rounded-full">SQL</span>
+                            <span class="bg-accent/20 text-accent text-xs font-semibold px-3 py-1 rounded-full">Exception Handling</span>
+                        </div>
+                        <div class="flex justify-center space-x-4 border-t border-accent/10 pt-4">
+                            <a href="https://github.com/pulivrthisaikiran13/Bank-Management-System-Project" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-accent dark:hover:text-accent transition-colors">
+                                <i data-lucide="github" class="w-5 h-5"></i>
+                                <span>View Code</span>
+                            </a>
+                            <a href="https://github.com/pulivrthisaikiran13/Bank-Management-System-Project" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-accent dark:hover:text-accent transition-colors">
+                                <i data-lucide="globe" class="w-5 h-5"></i>
+                                <span>Live Demo</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Card 1: Secure Electronic Voting -->
+                <div class="bg-primary-light dark:bg-primary-dark p-6 rounded-xl shadow-2xl border border-transparent dark:border-accent/10 transition-transform duration-300 hover:scale-[1.02] text-left mx-auto flex flex-col h-full">
+                    <div class="flex-grow">
+                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2 text-center">Secure Electronic Voting</h3>
+                        <p class="text-sm font-medium text-accent mb-4 text-center">Python, Django, Security</p>
+                        <p class="text-gray-600 dark:text-gray-400 mb-6 text-left">
+                            Designed and implemented a secure, web-based e-voting system using Python/Django, improving transparency and result accuracy in digital elections.
+                        </p>
+                        <ul class="text-gray-700 dark:text-gray-300 space-y-2 mb-6">
+                            <li class="flex items-start"><i data-lucide="lock" class="w-5 h-5 text-accent mr-2 mt-1 flex-shrink-0"></i>Integrated Multi-Factor Authentication (MFA) and Role-Based Access Control (RBAC) to ensure secure and authorised participation.</li>
+                            <li class="flex items-start"><i data-lucide="server" class="w-5 h-5 text-accent mr-2 mt-1 flex-shrink-0"></i>Developed a responsive frontend (HTML, CSS, JS, Bootstrap) enabling real-time monitoring and tamper-evident voting processes.</li>
+                        </ul>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <div class="flex flex-wrap gap-2 justify-center mt-4 mb-6">
+                            <span class="bg-accent/20 text-accent text-xs font-semibold px-3 py-1 rounded-full">Python</span>
+                            <span class="bg-accent/20 text-accent text-xs font-semibold px-3 py-1 rounded-full">Django</span>
+                            <span class="bg-accent/20 text-accent text-xs font-semibold px-3 py-1 rounded-full">MFA/RBAC</span>
+                            <span class="bg-accent/20 text-accent text-xs font-semibold px-3 py-1 rounded-full">Bootstrap</span>
+                        </div>
+                        <div class="flex justify-center space-x-4 border-t border-accent/10 pt-4">
+                            <a href="https://github.com/pulivrthisaikiran13/online-voting-system" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-accent dark:hover:text-accent transition-colors">
+                                <i data-lucide="github" class="w-5 h-5"></i>
+                                <span>View Code</span>
+                            </a>
+                            <a href="https://pulivrthisaikiran13.github.io/online-voting-system/" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-accent dark:hover:text-accent transition-colors">
+                                <i data-lucide="globe" class="w-5 h-5"></i>
+                                <span>Live Demo</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Card 2: Simple Web Calculator -->
+                <div class="bg-primary-light dark:bg-primary-dark p-6 rounded-xl shadow-2xl border border-transparent dark:border-accent/10 transition-transform duration-300 hover:scale-[1.02] text-left mx-auto flex flex-col h-full">
+                    <div class="flex-grow">
+                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2 text-center">Simple Web Calculator</h3>
+                        <p class="text-sm font-medium text-accent mb-4 text-center">HTML, CSS, JavaScript</p>
+                        <p class="text-gray-600 dark:text-gray-400 mb-6 text-left">
+                            Developed a clean, functional web-based calculator using pure HTML, CSS, and JavaScript. Supports all basic arithmetic operations.
+                        </p>
+                        <ul class="text-gray-700 dark:text-gray-300 space-y-2 mb-6">
+                            <li class="flex items-start"><i data-lucide="calculator" class="w-5 h-5 text-accent mr-2 mt-1 flex-shrink-0"></i>Implemented DOM manipulation to handle user input and display results dynamically.</li>
+                            <li class="flex items-start"><i data-lucide="layout" class="w-5 h-5 text-accent mr-2 mt-1 flex-shrink-0"></i>Designed a responsive, modern interface with a clear and intuitive button layout.</li>
+                            <li class="flex items-start"><i data-lucide="layout-grid" class="w-5 h-5 text-accent mr-2 mt-1 flex-shrink-0"></i>Designed a clean and easy button layout for smooth user experience.</li>
+                        </ul>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <div class="flex flex-wrap gap-2 justify-center mt-4 mb-6">
+                            <span class="bg-accent/20 text-accent text-xs font-semibold px-3 py-1 rounded-full">HTML</span>
+                            <span class="bg-accent/20 text-accent text-xs font-semibold px-3 py-1 rounded-full">CSS</span>
+                            <span class="bg-accent/20 text-accent text-xs font-semibold px-3 py-1 rounded-full">JavaScript</span>
+                        </div>
+                        <div class="flex justify-center space-x-4 border-t border-accent/10 pt-4">
+                        <a href="https://github.com/pulivrthisaikiran13/Calculator-Project" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-accent dark:hover:text-accent transition-colors">
+                            <i data-lucide="github" class="w-5 h-5"></i>
+                            <span>View Code</span>
+                        </a>
+                        <a href="https://simplecalculatorproject1.netlify.app/" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-accent dark:hover:text-accent transition-colors">
+                            <i data-lucide="globe" class="w-5 h-5"></i>
+                            <span>Live Demo</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project Card 3: This Portfolio -->
+                <div class="bg-primary-light dark:bg-primary-dark p-6 rounded-xl shadow-2xl border border-transparent dark:border-accent/10 transition-transform duration-300 hover:scale-[1.02] text-left mx-auto flex flex-col h-full">
+                    <div class="flex-grow">
+                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2 text-center">Personal Portfolio</h3>
+                        <p class="text-sm font-medium text-accent mb-4 text-center">HTML, CSS, JavaScript</p>
+                        <p class="text-gray-600 dark:text-gray-400 mb-6 text-left">
+                            A responsive personal portfolio (this website!) built from scratch to showcase my skills, projects, and contact information.
+                        </p>
+                        <ul class="text-gray-700 dark:text-gray-300 space-y-2 mb-6">
+                            <li class="flex items-start"><i data-lucide="smartphone" class="w-5 h-5 text-accent mr-2 mt-1 flex-shrink-0"></i>Includes a fully responsive mobile-first layout and a hamburger menu.</li>
+                            <li class="flex items-start"><i data-lucide="sun-moon" class="w-5 h-5 text-accent mr-2 mt-1 flex-shrink-0"></i>Features a light/dark mode theme toggle that syncs with system preferences.</li>
+                            <li class="flex items-start"><i data-lucide="mail" class="w-5 h-5 text-accent mr-2 mt-1 flex-shrink-0"></i>Integrated with EmailJS for the contact form and includes a scrollspy for navigation.</li>
+                        </ul>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <div class="flex flex-wrap gap-2 justify-center mt-4 mb-6">
+                            <span class="bg-accent/20 text-accent text-xs font-semibold px-3 py-1 rounded-full"> HTML & CSS</span>
+                            <span class="bg-accent/20 text-accent text-xs font-semibold px-3 py-1 rounded-full">JavaScript</span>
+                            <span class="bg-accent/20 text-accent text-xs font-semibold px-3 py-1 rounded-full">EmailJS</span>
+                        </div>
+                        <div class="flex justify-center space-x-4 border-t border-accent/10 pt-4">
+                            <a href="https://github.com/pulivrthisaikiran13/Personal-Portfolio" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-accent dark:hover:text-accent transition-colors">
+                                <i data-lucide="github" class="w-5 h-5"></i>
+                                <span>View Code</span>
+                            </a>
+                            <a href="https://saikiranpulivarthiportfolio.vercel.app/" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-accent dark:hover:text-accent transition-colors">
+                                <i data-lucide="globe" class="w-5 h-5"></i>
+                                <span>Live Demo</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <hr class="border-t border-gray-200 dark:border-primary-dark mb-20">
+
+        <!-- 5. EDUCATION -->
+        <section id="education" class="mb-20 scroll-mt-20 text-center">
+            <h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-8 border-l-4 border-accent pl-4 inline-block">Education</h2>
+            
+            <!-- Chalapathi Institute of Engineering and Technology -->
+            <div class="bg-primary-light dark:bg-primary-dark p-6 rounded-xl border border-transparent dark:border-accent/10 max-w-2xl mx-auto mb-4 transition-transform duration-300 hover:scale-[1.02]">
+                <h3 class="text-xl font-bold text-accent">Computer Science and Information Technology</h3>
+                <p class="text-lg text-gray-700 dark:text-gray-300">Chalapathi Institute of Engineering and Technology</p>
+                <p class="text-sm text-white-300 dark:text-white-300 mt-2">Dec 2021 - Apr 2025</p>
+                <p class="text-sm text-white-300 dark:text-white-300 mt-2">CGPA - 7.8</p>
+            </div>
+
+            <!-- Sri Chaitanya Jr College -->
+            <div class="bg-primary-light dark:bg-primary-dark p-6 rounded-xl border border-transparent dark:border-accent/10 max-w-2xl mx-auto mb-4 transition-transform duration-300 hover:scale-[1.02]">
+                <h3 class="text-xl font-bold text-accent">Intermediate (BIEAP)</h3>
+                <p class="text-lg text-gray-700 dark:text-gray-300">Sri Chaitanya Jr College</p>
+                <p class="text-sm text-white-300 dark:text-white-300 mt-2">May 2019 - May 2021</p>
+                <p class="text-sm text-white-300 dark:text-white-300 mt-2">Percentage - 83%</p>
+            </div>
+
+            <!-- Sri Chaitanya Techno School -->
+            <div class="bg-primary-light dark:bg-primary-dark p-6 rounded-xl border border-transparent dark:border-accent/10 max-w-2xl mx-auto mb-4 transition-transform duration-300 hover:scale-[1.02]">
+                <h3 class="text-xl font-bold text-accent">SSC (BSEAP)</h3>
+                <p class="text-lg text-gray-700 dark:text-gray-300">Sri Chaitanya Techno School</p>
+                <p class="text-sm text-white-300 dark:text-white-300 mt-2">May 2018 - Apr 2019</p>
+                <p class="text-sm text-white-300 dark:text-white-300 mt-2">GPA - 10.0</p>
+            </div>
+        </section>
+
+        <hr class="border-t border-gray-200 dark:border-primary-dark mb-10">
+
+        <!-- 6. CONTACT & SOCIALS -->
+        <section id="contact" class="py-10 scroll-mt-20">
+            <!-- SECTION HEADER -->
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">Get In Touch</h2>
+            </div>
+
+            <!-- 2-COLUMN LAYOUT -->
+            <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-start">
+                
+                <!-- Left Column for Contact Info -->
+                <div class="p-6 md:p-8 space-y-8 h-full text-left">
+                    
+                    <div>
+                        <h3 class="text-2xl font-bold text-accent mb-4">Let's Connect</h3>
+                        <p class="text-gray-600 dark:text-gray-300">
+                            As a fresher eager to grow and learn, I’m looking for opportunities 
+                            to apply my skills and contribute to real-world projects. 
+                            If you have something in mind, I’d love to connect.
+                        </p>
+                    </div>
+                    
+                    <!-- Contact Details -->
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Contact Information</h4>
+                        <div class="space-y-4">
+                            <div class="flex items-center space-x-4">
+                                <div class="bg-accent/10 p-3 rounded-full">
+                                    <i data-lucide="mail" class="w-5 h-5 text-accent"></i>
+                                </div>
+                                <div>
+                                    <span class="text-sm text-gray-500 dark:text-gray-400">Email</span>
+                                    <!-- ID for smart link JS -->
+                                    <a id="contact-info-email" href="mailto:saikiranpulivarthi13@gmail.com" class="text-gray-700 dark:text-gray-200 font-medium block hover:text-accent dark:hover:text-accent transition-colors">
+                                        saikiranpulivarthi13@gmail.com
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <div class="bg-accent/10 p-3 rounded-full">
+                                    <i data-lucide="phone" class="w-5 h-5 text-accent"></i>
+                                </div>
+                                <div>
+                                    <span class="text-sm text-gray-500 dark:text-gray-400">Phone</span>
+                                    <a href="tel:+916305760305" class="text-gray-700 dark:text-gray-200 font-medium block hover:text-accent dark:hover:text-accent transition-colors">
+                                        +91 6305760305
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Follow Me -->
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Follow Me</h4>
+                        <div class="space-y-4">
+                            <a href="https://github.com/pulivrthisaikiran13" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-4 group">
+                                <div class="bg-accent/10 p-3 rounded-full">
+                                    <i data-lucide="github" class="w-5 h-5 text-accent"></i>
+                                </div>
+                                <div>
+                                    <span class="text-sm text-gray-500 dark:text-gray-400">GitHub</span>
+                                    <p class="text-gray-700 dark:text-gray-200 font-medium group-hover:text-accent transition-colors">pulivrthisaikiran13</p>
+                                </div>
+                            </a>
+                            <a href="https://www.linkedin.com/in/saikiranpulivarthi" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-4 group">
+                                <div class="bg-accent/10 p-3 rounded-full">
+                                    <i data-lucide="linkedin" class="w-5 h-5 text-accent"></i>
+                                </div>
+                                <div>
+                                    <span class="text-sm text-gray-500 dark:text-gray-400">LinkedIn</span>
+                                    <p class="text-gray-700 dark:text-gray-200 font-medium group-hover:text-accent transition-colors">saikiranpulivarthi</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Right Column for Contact Form -->
+                <form id="contact-form" class="bg-primary-light dark:bg-primary-dark p-6 md:p-8 rounded-xl shadow-2xl border border-transparent dark:border-accent/10 space-y-6 mb-10 md:mb-0 text-left transition-transform duration-300 hover:scale-[1.02]">
+                    
+                    <h3 class="text-2xl font-bold text-accent mb-4">Send Me A Message</h3>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <!-- Name -->
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Name</label> 
+                            <input type="text" id="name" name="name" placeholder="Enter your name" required
+                                   class="w-full p-3 bg-secondary-light dark:bg-secondary-dark border border-gray-400 dark:border-gray-700 rounded-lg text-gray-800 dark:text-gray-300 transition-colors focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent placeholder-gray-500 dark:placeholder-gray-600">
+                        </div>
+
+                        <!-- Email -->
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
+                            <input type="email" id="email" name="email" placeholder="your.email@example.com" required
+                                   class="w-full p-3 bg-secondary-light dark:bg-secondary-dark border border-gray-400 dark:border-gray-700 rounded-lg text-gray-800 dark:text-gray-300 transition-colors focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent placeholder-gray-500 dark:placeholder-gray-600">
+                        </div>
+                    </div>
+                    
+                    <!-- Subject -->
+                    <div>
+                        <label for="subject" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Subject</label>
+                        <input type="text" id="subject" name="subject" placeholder="Enter Subject" required
+                               class="w-full p-3 bg-secondary-light dark:bg-secondary-dark border border-gray-400 dark:border-gray-700 rounded-lg text-gray-800 dark:text-gray-300 transition-colors focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent placeholder-gray-500 dark:placeholder-gray-600">
+                    </div>
+
+                    <!-- Message -->
+                    <div>
+                        <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Message</labe>
+                        <textarea id="message" name="message" rows="5" placeholder="Enter Message" required
+                                  class="w-full p-3 bg-secondary-light dark:bg-secondary-dark border border-gray-400 dark:border-gray-700 rounded-lg text-gray-800 dark:text-gray-300 transition-colors focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent placeholder-gray-500 dark:placeholder-gray-600"></textarea>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" id="submit-btn"
+                            class="w-full px-6 py-3 bg-accent text-secondary-dark font-bold rounded-lg shadow-lg hover:bg-teal-300 transition-all transform hover:scale-[1.01] flex items-center justify-center space-x-2 mt-6">
+                        <i data-lucide="send" class="w-5 h-5"></i>
+                        <span>Submit</span>
+                    </button>
+                </form>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-primary-light dark:bg-primary-dark border-t border-gray-200 dark:border-accent/10">
+        <div class="max-w-6xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+            
+            <!-- Column 1: Your Portfolio -->
+            <div>
+                <h4 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Sai Kiran Pulivarthi</h4>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                    To leverage my technical knowledge, problem-solving skills, and passion for innovation in a challenging role.
+                </p>
+                <div class="flex justify-center md:justify-start space-x-4">
+                    <a href="https://github.com/pulivrthisaikiran13" target="_blank" rel="noopener noreferrer" class="text-gray-500 dark:text-gray-400 hover:text-accent dark:hover:text-accent transition-colors" title="GitHub">
+                        <i data-lucide="github" class="w-6 h-6"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/saikiranpulivarthi" target="_blank" rel="noopener noreferrer" class="text-gray-500 dark:text-gray-400 hover:text-accent dark:hover:text-accent transition-colors" title="LinkedIn">
+                        <i data-lucide="linkedin" class="w-6 h-6"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Column 2: Quick Links -->
+            <div>
+                <h4 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Quick Links</h4>
+                <nav class="flex flex-col space-y-2">
+                    <a href="#about" class="text-sm text-gray-600 dark:text-gray-400 hover:text-accent dark:hover:text-accent transition-colors">About</a>
+                    <a href="#skills" class="text-sm text-gray-600 dark:text-gray-400 hover:text-accent dark:hover:text-accent transition-colors">Skills</a>
+                    <a href="#projects" class="text-sm text-gray-600 dark:text-gray-400 hover:text-accent dark:hover:text-accent transition-colors">Projects</a>
+                    <a href="#education" class="text-sm text-gray-600 dark:text-gray-400 hover:text-accent dark:hover:text-accent transition-colors">Education</a>
+                    <a href="#contact" class="text-sm text-gray-600 dark:text-gray-400 hover:text-accent dark:hover:text-accent transition-colors">Contact</a>
+                </nav>
+            </div>
+
+            <!-- Column 3: Get In Touch -->
+            <div>
+                <h4 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Get In Touch</h4>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                    If you are looking for a motivated developer who enjoys solving real problems and learning fast, feel free to reach out.                </p>
+                <!-- ID for smart link JS -->
+                <a id="footer-email" href="mailto:saikiranpulivarthi13@gmail.com" class="text-sm text-accent font-medium mb-4 inline-block hover:opacity-80">
+                    saikiranpulivarthi13@gmail.com
+                </a>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                    I am actively seeking full-time roles and internship opportunities in software development.
+                </p>
+                <!-- UPDATED: Added mt-4 for margin -->
+                <a href="#contact" class="mt-4 px-5 py-2.5 bg-accent text-secondary-dark font-semibold rounded-lg shadow-lg hover:bg-teal-300 transition-all text-sm inline-block">
+                    Let's Work Together
+                </a>
+            </div>
+
+        </div>
+        <!-- Copyright Bar -->
+        <div class="border-t border-gray-200 dark:border-accent/10">
+            <div class="max-w-6xl mx-auto px-4 py-4 text-center">
+                <p class="text-sm text-gray-500 dark:text-gray-400">
+                    &copy; 2025 Sai Kiran Pulivarthi. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <button id="scrollToTopBtn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})"
+        class="fixed bottom-6 right-6 bg-accent text-secondary-dark p-3 rounded-full shadow-lg transition-opacity duration-300 opacity-0 hover:bg-teal-300">
+        <i data-lucide="chevron-up" class="w-6 h-6"></i>
+    </button>
+    
+    <!-- Link to external JavaScript file -->
+    <script src="script.js"></script>
+
+</body>
+</html>
+

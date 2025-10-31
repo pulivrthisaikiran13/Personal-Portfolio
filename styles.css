@@ -1,0 +1,48 @@
+/* Custom modal styles */
+.feedback-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+}
+
+.feedback-modal.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Scrollspy active link style */
+.nav-active {
+    color: #2dd4bf !important; /* important to override dark:text-gray-300 */
+    font-weight: 600; /* semibold */
+}
+
+/* Blinking cursor for typewriter effect */
+.blinking-cursor {
+    animation: blink 0.75s step-end infinite;
+}
+
+@keyframes blink {
+    from, to {
+        color: transparent;
+    }
+    50% {
+        color: #2dd4bf; /* accent color */
+    }
+}
+
+
+/* Prevents scrolling when mobile menu is open */
+.no-scroll {
+    overflow: hidden;
+}
+

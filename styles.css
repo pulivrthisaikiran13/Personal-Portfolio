@@ -22,10 +22,10 @@
 
 /* Scrollspy active link style */
 .nav-active {
-    color: #2dd4bf !important; /* important to override dark:text-gray-300 */
-    font-weight: 600; /* semibold */
+    color: #2dd4bf !important;
+    font-weight: 600;
+    transition: color 0.2s ease-in-out;
 }
-
 /* Blinking cursor for typewriter effect */
 .blinking-cursor {
     animation: blink 0.75s step-end infinite;
@@ -46,3 +46,16 @@
     overflow: hidden;
 }
 
+/* Ensure Font Awesome icons have consistent width in lists/menus */
+.fa-brands, .fa-solid {
+    display: inline-block;
+    text-align: center;
+    width: 1.25em; /* Adjust based on your preference */
+}
+
+/* Fix for the modal icons to ensure they are centered */
+#modal-icon i {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}

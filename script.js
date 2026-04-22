@@ -50,30 +50,25 @@ function showFeedbackModal(message, isSuccess = true) {
 
     const isDarkMode = document.documentElement.classList.contains('dark');
     
-    // Determine colors based on theme and success state
     const baseBgClass = isDarkMode ? 'bg-primary-dark' : 'bg-primary-light';
     const textColorClass = isDarkMode ? 'text-white' : 'text-gray-900';
     const borderColorClass = isSuccess ? 'border-accent' : 'border-red-500';
     
+    // UPDATED: Changed Lucide icons to Font Awesome icons
     const iconHTML = isSuccess 
-        ? `<i data-lucide="check-circle" class="w-8 h-8 text-accent mx-auto mb-3"></i>` 
-        : `<i data-lucide="x-circle" class="w-8 h-8 text-red-500 mx-auto mb-3"></i>`;
+        ? `<i class="fa-solid fa-circle-check text-4xl text-accent mb-3"></i>` 
+        : `<i class="fa-solid fa-circle-xmark text-4xl text-red-500 mb-3"></i>`;
         
     const buttonColorClass = isSuccess 
         ? 'bg-accent text-secondary-dark hover:bg-teal-300' 
         : 'bg-red-600 text-white hover:opacity-90';
 
-    // Set dynamic content and styles
     modal.querySelector('div').className = `${baseBgClass} p-8 rounded-lg shadow-xl max-w-sm w-full text-center border-t-4 ${borderColorClass}`;
     iconElement.innerHTML = iconHTML;
     messageElement.textContent = message;
     messageElement.className = `${textColorClass} text-lg font-semibold mb-6`;
     buttonElement.className = `px-4 py-2 rounded-md font-semibold transition-colors ${buttonColorClass}`;
     
-    // Ensure Lucide icons are correctly rendered
-    if (typeof lucide !== 'undefined') {
-        lucide.createIcons();
-    }
     modal.classList.add('show');
 }
 
@@ -212,7 +207,7 @@ $(document).ready(function() {
 
         // 1. Show temporary "Sending..." message and disable button
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i data-lucide="loader-circle" class="w-5 h-5 animate-spin"></i> Sending...';
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Sending...';
         
         // Render the new loader icon
         if (typeof lucide !== 'undefined') {
